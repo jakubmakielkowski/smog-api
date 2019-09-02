@@ -1,0 +1,30 @@
+{
+  "name": "smog-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "server": "nodemon ./server.js",
+    "server-debug": "node --inspect=0.0.0.0:9229 server.js",
+    "request": "node ./requests/request.js",
+    "request:stations": "node ./requests/get/stations.js",
+    "request:sensors": "node ./requests/get/sensors.js",
+    "request:qualityIndices": "node ./requests/get/qualityIndices.js",
+    "request:measurements": "node ./requests/get/measurements.js"
+  },
+  "author": "Jakub Makiełkowski",
+  "license": "ISC",
+  "dependencies": {
+    "app-root-path": "^2.2.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "mongodb": "^3.3.2",
+    "mongoose": "^5.6.11",
+    "node-fetch": "^2.6.0"
+  }
+}
