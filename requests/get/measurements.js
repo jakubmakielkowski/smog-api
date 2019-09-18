@@ -73,6 +73,7 @@ const getMeasurements = async (APIUrl) => {
 			},
 			{
 				$set: {
+					param: measurement.param,
 					values: measurement.values,
 					dateOfInsertion: measurement.dateOfInsertion
 				}
