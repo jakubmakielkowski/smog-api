@@ -10,12 +10,8 @@ router.get("/:stationId", async (req, res) => {
 	const client = await MongoConnection;
 	const db = client.db(process.env.DATABASE_NAME);
 
-	const qualityIndex = await new Promise((resolve, reject) => {
-		db.collection(process.env.DATABASE_COL_QUALITY_INDEX).findOne({ "stationId": Number(req.params.stationId) }, function (err, result) {
-			if (err) throw err;
-			resolve(result);
-		});
-	});
+	const { stationId } = req.params;
+	const qualityIndex = await db.collection(process.env.DATABASE_COL_QUALITY_INDEX).findOne({ "stationId": Number(stationId) });
 	res.send(qualityIndex);
 });
 
@@ -23,13 +19,8 @@ router.get("/", async (req, res) => {
 	const client = await MongoConnection;
 	const db = client.db(process.env.DATABASE_NAME);
 
-	const qualityIndex = await new Promise((resolve, reject) => {
-		db.collection(process.env.DATABASE_COL_QUALITY_INDEX).find().sort({ stationId: -1 }).toArray(function (err, result) {
-			if (err) throw err;
-			resolve(result);
-		});
-	});
-	res.send(qualityIndex);
+	const qualityIndices = await db.collection(process.env.DATABASE_COL_QUALITY_INDEX).find().toArray();
+	res.send(qualityIndices);
 });
 
 module.exports = router;

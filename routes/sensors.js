@@ -10,13 +10,8 @@ router.get("/:stationId", async (req, res) => {
 	const client = await MongoConnection;
 	const db = client.db(process.env.DATABASE_NAME);
 
-	const sensor = await new Promise((resolve, reject) => {
-		db.collection(process.env.DATABASE_COL_SENSORS).find({ "stationId": Number(req.params.stationId) }).toArray(function (err, result) {
-			if (err) throw err;
-			resolve(result);
-		});
-	});
-
+	const { stationId } = req.params;
+	const sensor = await db.collection(process.env.DATABASE_COL_SENSORS).find({ "stationId": Number(stationId) }).toArray();
 	res.send(sensor);
 });
 

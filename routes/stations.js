@@ -9,22 +9,18 @@ const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, {
 router.get("/search", async (req, res) => {
 	const client = await MongoConnection;
 	const db = client.db(process.env.DATABASE_NAME);
-	const stations = await new Promise((resolve, reject) => {
-		db.collection(process.env.DATABASE_COL_STATIONS).find({ $text: { $search: req.query.name } }).toArray((error, result) => {
-			resolve(result);
-		});
-	});
+
+	const { name } = req.query;
+	console.log(name)
+	const stations = await db.collection(process.env.DATABASE_COL_STATIONS).find({ $text: { $search: String(name) } }).toArray();
 	res.send(stations);
 });
 
 router.get("/", async (req, res) => {
-	const client = await MongoConnection
+	const client = await MongoConnection;
 	const db = client.db(process.env.DATABASE_NAME);
-	const stations = await new Promise((resolve, reject) => {
-		db.collection(process.env.DATABASE_COL_STATIONS).find().sort({ stationId: -1 }).toArray((error, result) => {
-			resolve(result);
-		});
-	});
+
+	const stations = await db.collection(process.env.DATABASE_COL_STATIONS).find().toArray();
 	res.send(stations);
 });
 
@@ -32,13 +28,9 @@ router.get("/:stationId", async (req, res) => {
 	const client = await MongoConnection;
 	const db = client.db(process.env.DATABASE_NAME);
 
-	const stations = await new Promise((resolve, reject) => {
-		db.collection(process.env.DATABASE_COL_STATIONS).findOne({ "stationId": Number(req.params.stationId) }, (error, result) => {
-			resolve(result);
-		});
-	});
-
-	res.send(stations);
+	const { stationId } = req.params;
+	const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ "stationId": Number(stationId) });
+	res.send(station);
 });
 
 module.exports = router;

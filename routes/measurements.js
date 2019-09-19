@@ -14,37 +14,15 @@ router.get("/:stationId", async (req, res) => {
 
 	const { stationId } = req.params;
 
-	const measurement = await new Promise((resolve, reject) => {
-		db.collection(process.env.DATABASE_COL_MEASUREMENTS).find({ "stationId": Number(stationId) }).toArray(async (err, result) => {
-			if (err) throw err;
+	// Get measurements data from station
+	const measurements = await db.collection(process.env.DATABASE_COL_MEASUREMENTS).find({ "stationId": Number(stationId) }).toArray();
 
-			if (result.length) {
-				resolve(result);
-			} else {
-				const measurements = await addMeasurement(stationId);
-				resolve(measurements);
-			}
-		});
-	});
-	res.send(measurement);
-});
-
-
-
-
-
-
-router.post("/:stationId", async (req, res) => {
-	console.log(req.params.stationId)
-	// const client = await MongoConnection;
-	// const db = client.db(process.env.DATABASE_NAME);
-
-	const sensors = await fetchSensors(req.params.stationId)
-	const sensorsIds = sensors.map(sensor => sensor.id);
-	console.log(sensorsIds)
-
-	for (let i = 0; i < sensorsIds.length; i++) {
-
+	// Send existing data or fetch it from API if not present and then send
+	if(measurements.length){
+		res.send(measurements);
+	} else {
+		const newMeasurements = await addMeasurement(stationId);
+		res.send(newMeasurements);
 	}
 });
 
