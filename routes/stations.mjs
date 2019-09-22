@@ -1,6 +1,10 @@
-const express = require("express");
+import express from "express";
+import { default as mongodb } from "mongodb";
+import dotenv from 'dotenv';
+
+dotenv.config();
 const router = express.Router();
-const MongoClient = require("mongodb").MongoClient;
+const MongoClient = mongodb.MongoClient;
 
 const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, {
 	useNewUrlParser: true, useUnifiedTopology: true
@@ -11,7 +15,6 @@ router.get("/search", async (req, res) => {
 	const db = client.db(process.env.DATABASE_NAME);
 
 	const { name } = req.query;
-	console.log(name)
 	const stations = await db.collection(process.env.DATABASE_COL_STATIONS).find({ $text: { $search: String(name) } }).toArray();
 	res.send(stations);
 });
@@ -33,4 +36,4 @@ router.get("/:stationId", async (req, res) => {
 	res.send(station);
 });
 
-module.exports = router;
+export default router;

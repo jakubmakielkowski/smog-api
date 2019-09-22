@@ -1,10 +1,12 @@
-require("dotenv").config();
-const fetch = require('node-fetch');
-const MongoClient = require("mongodb").MongoClient;
+import dotenv from 'dotenv';
+import fetch from 'node-fetch';
+import { default as mongodb } from "mongodb";
 
-const Measurement = require('../../schemas/Measurement.js');
-const sleep = require('../../utils/sleep.js');
+import Measurement from '../../schemas/Measurement.mjs';
+import sleep from '../../utils/sleep.mjs';
 
+dotenv.config();
+const MongoClient = mongodb.MongoClient;
 const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const getMeasurements = async (APIUrl) => {
@@ -91,4 +93,4 @@ const getMeasurements = async (APIUrl) => {
 
 getMeasurements(`http://api.gios.gov.pl/pjp-api/rest/data/getData`);
 
-module.exports = getMeasurements;
+export default getMeasurements;

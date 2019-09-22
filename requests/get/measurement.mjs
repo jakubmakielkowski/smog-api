@@ -1,10 +1,13 @@
-const fetch = require('node-fetch');
-const MongoClient = require("mongodb").MongoClient;
+import dotenv from 'dotenv';
+import fetch from 'node-fetch';
+import { default as mongodb } from "mongodb";
 
-const Measurement = require('../../schemas/Measurement.js');
+import Measurement from '../../schemas/Measurement.mjs';
 
-
+dotenv.config();
+const MongoClient = mongodb.MongoClient;
 const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, { useNewUrlParser: true, useUnifiedTopology: true });
+
 const fetchSensors = async (stationId) => {
 	const response = await fetch(`http://api.gios.gov.pl/pjp-api/rest/station/sensors/${stationId}`)
 	const sensorsData = await response.json();
@@ -84,4 +87,4 @@ const addMeasurement = async (stationId) => {
 	return measurementsToSend;	
 }
 
-module.exports = addMeasurement;
+export default addMeasurement;

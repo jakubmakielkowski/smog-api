@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const Measurement = new mongoose.Schema(
 	{
@@ -13,4 +13,6 @@ const Measurement = new mongoose.Schema(
 	}
 );
 
-module.exports = mongoose.model("Measurement", Measurement);
+const MeasurementModel = mongoose.model("Measurement", Measurement);
+
+export default MeasurementModel;

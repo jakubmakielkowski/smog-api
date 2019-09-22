@@ -1,6 +1,10 @@
-const express = require("express");
+import express from "express";
+import { default as mongodb } from "mongodb";
+import dotenv from 'dotenv';
+
+dotenv.config();
 const router = express.Router();
-const MongoClient = require("mongodb").MongoClient;
+const MongoClient = mongodb.MongoClient;
 
 const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, {
 	useNewUrlParser: true, useUnifiedTopology: true
@@ -15,4 +19,4 @@ router.get("/:stationId", async (req, res) => {
 	res.send(sensor);
 });
 
-module.exports = router;
+export default router;

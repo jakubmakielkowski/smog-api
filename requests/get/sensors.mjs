@@ -1,13 +1,16 @@
-require("dotenv").config();
-const fetch = require('node-fetch');
-const MongoClient = require("mongodb").MongoClient;
+import dotenv from 'dotenv';
+import fetch from 'node-fetch';
+import { default as mongodb } from "mongodb";
 
-const Sensor = require('../../schemas/Sensor.js');
-const sleep = require('../../utils/sleep.js');
+import Sensor from '../../schemas/Sensor.mjs';
+import sleep from '../../utils/sleep.mjs';
 
+dotenv.config();
+const MongoClient = mongodb.MongoClient;
 const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const getSensors = async (APIUrl) => {
+	
 	// 1. Connect with database
 	let database, client;
 	try {
@@ -83,4 +86,4 @@ const getSensors = async (APIUrl) => {
 
 getSensors(`https://api.gios.gov.pl/pjp-api/rest/station/sensors`);
 
-module.exports = getSensors;
+export default getSensors;
