@@ -1,16 +1,12 @@
-import express from "express";
-import { default as mongodb } from "mongodb";
 import dotenv from 'dotenv';
+import express from "express";
 
 import addMeasurement from '../requests/get/measurement.mjs';
+import MongoConnection from '../utils/database/MongoConnection.mjs';
 
 dotenv.config();
 const router = express.Router();
-const MongoClient = mongodb.MongoClient;
 
-const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, {
-	useNewUrlParser: true, useUnifiedTopology: true
-});
 
 // Get measurements from station sensors
 router.get("/:stationId", async (req, res) => {

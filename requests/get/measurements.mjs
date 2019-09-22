@@ -1,13 +1,11 @@
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
-import { default as mongodb } from "mongodb";
 
 import Measurement from '../../schemas/Measurement.mjs';
+import MongoConnection from '../../utils/database/MongoConnection.mjs';
 import sleep from '../../utils/sleep.mjs';
 
 dotenv.config();
-const MongoClient = mongodb.MongoClient;
-const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const getMeasurements = async (APIUrl) => {
 

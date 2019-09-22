@@ -1,12 +1,10 @@
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
-import { default as mongodb } from "mongodb";
 
 import Measurement from '../../schemas/Measurement.mjs';
+import MongoConnection from '../../utils/database/MongoConnection.mjs';
 
 dotenv.config();
-const MongoClient = mongodb.MongoClient;
-const MongoConnection = MongoClient.connect(process.env.DATABASE_URL_DEV, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const fetchSensors = async (stationId) => {
 	const response = await fetch(`http://api.gios.gov.pl/pjp-api/rest/station/sensors/${stationId}`)
