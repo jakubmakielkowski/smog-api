@@ -33,7 +33,9 @@ const addMeasurement = async (stationId) => {
 	// 2. Fetch sensors
 	let sensorIds;
 	try {
-		const sensorList = await fetchSensors(stationId);
+		// stationIds are in 'GIOS-n' format, replace to 'n'
+		const id = stationId.replace(/\D/g,'');
+		const sensorList = await fetchSensors(id);
 		sensorIds = sensorList.map(sensor => sensor.id);
 	} catch (error) {
 		console.log(error);
@@ -41,48 +43,51 @@ const addMeasurement = async (stationId) => {
 
 
 
-	// 3. For every sensor id, fetch its measurement data and put to database
-	const measurementsToSend = [];
+	// 3. For every sensor id, fetch its measurement data
+	const measurements = [];
+
+	const measurement = new Measurement({
+		stationId: stationId,
+		dateOfInsertion: new Date(),
+		measurements: []
+	});
+
 	for (let i = 0; i < sensorIds.length - 1; i++) {
 		const sensorId = sensorIds[i];
 		try {
 			const measurementData = await fetchMeasurements(sensorIds[i]);
 			const { key, values } = measurementData;
 
-			// Only last 48 hours measurements
 			values.splice(48);
 
-			const measurement = new Measurement({
-				stationId: stationId,
+			const current = {
 				sensorId: sensorId,
 				param: key,
-				values: values,
-				dateOfInsertion: new Date()
-			});
+				values: values
+			}
 
-			measurementsToSend.push(measurement);
-
-			await database.collection("Measurements").updateOne(
-				{
-					stationId: measurement.stationId,
-					sensorId: measurement.sensorId
-				},
-				{
-					$set: {
-						param: measurement.param,
-						values: measurement.values,
-						dateOfInsertion: measurement.dateOfInsertion
-					}
-				},
-				{ upsert: true }
-			);
+			measurement.measurements.push(current);
 		} catch (error) {
 			console.log(error)
 		}
 	}
+
+	await database.collection("Measurements").updateOne(
+		{
+			stationId: measurement.stationId
+		},
+		{
+			$set: {
+				measurements: measurement.measurements,
+				dateOfInsertion: measurement.dateOfInsertion
+			}
+		},
+		{ upsert: true }
+	);
+
 	process.stdout.write(`getMeasurements request succeeded`);
 	client.close();
-	return measurementsToSend;	
+	return measurements;	
 }
 
 export default addMeasurement;
