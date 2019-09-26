@@ -7,9 +7,9 @@ import MongoConnection from '../../utils/database/MongoConnection.mjs';
 dotenv.config();
 
 
-const getStations = async (APIUrl) => {
+const getStations = async () => {
 	// 1. Connect with database
-	process.stdout.write(`getStations - connecting to db...`);
+	process.stdout.write(`Get Stations (GIOS) - connecting to db...`);
 	let database, client;
 	try {
 		client = await MongoConnection;
@@ -21,36 +21,26 @@ const getStations = async (APIUrl) => {
 
 
 	// 2. Fetch stations data
-	process.stdout.write(`\ngetStations - fetching data from API...`);
+	process.stdout.write(`\nGet Stations (GIOS) - fetching data from API...`);
 	let stationsData;
 	try {
-		const response = await fetch(`${APIUrl}`);
+		const response = await fetch(`${process.env.API_GIOS_STATIONS_ENDPOINT}`);
 		stationsData = await response.json();
 	} catch (error) {
 		throw error;
 	}
 
-
-
-	// 3. Create or recreate collection
-	process.stdout.write(`\ngetStations - creating collection...`);
-	await database.createCollection(process.env.DATABASE_COL_STATIONS, (err, res) => {
-		if (err) {
-			throw err;
-		}
-	});
-
-
-
-	// 4. Insert stations
-	process.stdout.write(`\ngetStations - inserting to database...`);
+	// 3. Insert stations
 	for (let i = 0; i < stationsData.length; i++) {
+
+		process.stdout.write(`Get Stations (GIOS) - inserting to database... ${i+1}/${stationsData.length}`);
+
 		const stationData = stationsData[i];
 		const { id, gegrLat, gegrLon, addressStreet } = stationData;
 		const { provinceName, districtName, communeName } = stationData.city && stationData.city.commune || {};
 
 		const station = new Station({
-			stationId: id,
+			stationId: `GIOS-${id}`,
 			location: {
 				latitude: gegrLat,
 				longitude: gegrLon
@@ -60,7 +50,8 @@ const getStations = async (APIUrl) => {
 				district: districtName || null,
 				city: communeName || null,
 				street: addressStreet || null
-			}
+			},
+			source: "GIOS"
 		});
 
 		// Insert station to db
@@ -69,17 +60,21 @@ const getStations = async (APIUrl) => {
 			{
 				$set: {
 					location: station.location,
-					address: station.address
+					address: station.address,
+					source: station.source
 				}
 			},
 			{ upsert: true }
-		)
+		);
+
+		process.stdout.clearLine();
+		process.stdout.cursorTo(0);
 	}
 
-	process.stdout.write(`\ngetStations succedeed`);
+	process.stdout.write(`Get Stations (GIOS) succedeed`);
 	client.close();
 }
 
-getStations(`https://api.gios.gov.pl/pjp-api/rest/station/findAll`);
+getStations();
 
 export default getStations;

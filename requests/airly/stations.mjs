@@ -5,9 +5,8 @@ import Station from '../../schemas/Station.mjs';
 import MongoConnection from '../../utils/database/MongoConnection.mjs';
 
 dotenv.config();
-// global.Headers = fetch.Headers;
 
-const getInstallations = async () => {
+const getStations = async () => {
 
 	// 1. Connect with database
 	let database, client;
@@ -18,18 +17,7 @@ const getInstallations = async () => {
 		console.log(error);
 	}
 
-
-
-	// 2. Create or recreate collection
-	process.stdout.write(`\ngetInstallations - creating collection...`);
-	try {
-		await database.createCollection(process.env.DATABASE_COL_AIRLY_INSTALLATIONS);
-	} catch (error) {
-		console.log(error);
-	}
-
-
-	// 3. Fetch data from API
+	// 2. Fetch data from API
 	const requestOptions = {
 		lat: 51.919231,
 		lng: 19.134422,
@@ -51,10 +39,10 @@ const getInstallations = async () => {
 	} catch (error) {
 		console.log(error);
 	}
-	console.log(installationsList)
-	// 4. Add installations to database
+
+	// 3. Add stations to database
 	for (let i = 0; i < installationsList.length; i++) {
-		process.stdout.write(`ngetInstallations - adding to database... ${i}/${installationsList.length}\n`);
+		process.stdout.write(`Get Stations (Airly) - adding to database... ${i+1}/${installationsList.length}`);
 
 		const installation = installationsList[i];
 
@@ -86,7 +74,7 @@ const getInstallations = async () => {
 			}
 
 			// Insert station to db
-			await database.collection(process.env.DATABASE_COL_AIRLY_INSTALLATIONS).updateOne(
+			await database.collection(process.env.DATABASE_COL_STATIONS).updateOne(
 				{ stationId: station.stationId },
 				{
 					$set: {
@@ -104,10 +92,10 @@ const getInstallations = async () => {
 		process.stdout.cursorTo(0);
 	}
 
-	process.stdout.write(`getSensors succedeed\n`);
+	process.stdout.write(`Get Stations (Airly) - succedeed`);
 	client.close();
 }
 
-getInstallations();
+getStations();
 
-export default getInstallations;
+export default getStations;
