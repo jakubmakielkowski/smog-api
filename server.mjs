@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import express from "express";
 
 import stations from "./routes/stations.mjs";
-import sensors from "./routes/sensors";
 import qualityIndices from "./routes/qualityIndices";
 import measurements from "./routes/measurements";
 
@@ -18,7 +17,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/stations", stations);
-app.use("/sensors", sensors);
 app.use("/qualityIndices", qualityIndices);
 app.use("/measurements", measurements);
 

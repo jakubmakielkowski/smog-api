@@ -29,7 +29,7 @@ router.get("/:stationId", async (req, res) => {
 	const db = client.db(process.env.DATABASE_NAME);
 
 	const { stationId } = req.params;
-	const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ "stationId": Number(stationId) });
+	const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ "stationId": stationId });
 	res.send(station);
 });
 

@@ -87,7 +87,7 @@ const addMeasurement = async (stationId) => {
 
 	process.stdout.write(`getMeasurements request succeeded`);
 	client.close();
-	return measurements;	
+	return measurement;	
 }
 
 export default addMeasurement;

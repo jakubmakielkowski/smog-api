@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 
 const Measurement = new mongoose.Schema(
 	{
-		stationId: Number,
-		sensorId: Number,
-		param: String,
-		values: [{
-			date: Date,
-			value: String
+		stationId: String,
+		measurements: [{
+			sensorId: Number,
+			param: String,
+			values: [{
+				date: Date,
+				value: String
+			}],
 		}],
 		dateOfInsertion: Date
 	}
