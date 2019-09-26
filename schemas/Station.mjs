@@ -2,18 +2,22 @@ import mongoose from "mongoose";
 
 const StationSchema = new mongoose.Schema(
 	{
-		stationId: Number,
-		airlyId: Number,
+		stationId: String,
 		location: {
 			latitude: Number,
 			longitude: Number
 		},
 		address: {
-			province: String,
-			district: String,
 			city: String,
 			street: String
-		}
+		},
+		sponsor: {
+			name: String,
+			description: String,
+			logo: String,
+			link: String
+		},
+		source: String
 	}
 );
 
