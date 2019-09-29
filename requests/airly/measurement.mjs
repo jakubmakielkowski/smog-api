@@ -35,7 +35,7 @@ const addMeasurement = async (stationId) => {
 		measurementData.forecast.splice(48);
 
 		const history = measurementData.history;
-		const forecast = measurementData.history;
+		const forecast = measurementData.forecast;
 
 		const defaultParams = ["PM10", "PM25", "C6H6", "CO", "SO2", "NO2", "O3"];
 		const params = history[0].values.filter(value => defaultParams.find(param => param === value.name));
@@ -44,19 +44,28 @@ const addMeasurement = async (stationId) => {
 		const measurements = [];
 		paramNames.forEach(param => {
 			const historicValues = [];
-
-			history.forEach(el => {
-				const value = el.values.find(value => value.name === param).value;
+			history.forEach(element => {
+				const value = element.values.find(value => value.name === param).value;
 				historicValues.push({
-					date: el.fromDateTime,
+					date: element.fromDateTime,
 					value: value
 				});
-			})
+			});
+			
+			const forecastValues = [];
+			forecast.forEach(element => {
+				const value = element.values.find(value => value.name === param).value;
+				forecastValues.push({
+					date: element.fromDateTime,
+					value: value
+				});
+			});
 
 			measurements.push({
 				param: param,
-				historicValues: historicValues
-			})
+				historicValues: historicValues,
+				forecastValues: forecastValues
+			});
 		});
 
 		measurement.measurements = measurements;

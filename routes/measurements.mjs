@@ -22,9 +22,8 @@ router.get("/:stationId", async (req, res) => {
 	const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ "stationId": stationId });
 
 	const { source } = station;
-	console.log(source)
 
-	// Send existing data or fetch it from API if not present and then send
+	// Send existing data or fetch it from API if not present
 	if(measurements){
 		res.send(measurements);
 	} else {
