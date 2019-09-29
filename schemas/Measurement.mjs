@@ -6,10 +6,14 @@ const Measurement = new mongoose.Schema(
 		measurements: [{
 			sensorId: Number,
 			param: String,
-			values: [{
+			historicValues: [{
 				date: Date,
 				value: String
 			}],
+			forecastValues: [{
+				date: Date,
+				value: String
+			}]
 		}],
 		dateOfInsertion: Date
 	}

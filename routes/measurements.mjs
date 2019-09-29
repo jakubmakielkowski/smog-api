@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
 import express from "express";
 
-import addMeasurement from '../requests/gios/measurement.mjs';
+import addGIOSMeasurement from '../requests/gios/measurement.mjs';
+import addAirlyMeasurement from '../requests/airly/measurement.mjs';
 import MongoConnection from '../utils/database/MongoConnection.mjs';
 
 dotenv.config();
@@ -18,11 +19,21 @@ router.get("/:stationId", async (req, res) => {
 	// Get measurements data from station
 	const measurements = await db.collection(process.env.DATABASE_COL_MEASUREMENTS).findOne({ "stationId": stationId });
 
+	const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ "stationId": stationId });
+
+	const { source } = station;
+	console.log(source)
+
 	// Send existing data or fetch it from API if not present and then send
 	if(measurements){
 		res.send(measurements);
 	} else {
-		const newMeasurements = await addMeasurement(stationId);
+		let newMeasurements;
+		switch(source){
+			case "GIOS": newMeasurements = await addGIOSMeasurement(stationId); break;
+			case "Airly": newMeasurements = await addAirlyMeasurement(stationId); break;
+			default: console.log("Station source is not GIOS or Airly");
+		}
 		res.send(newMeasurements);
 	}
 });

@@ -61,9 +61,8 @@ const addMeasurement = async (stationId) => {
 			values.splice(48);
 
 			const current = {
-				sensorId: sensorId,
 				param: key,
-				values: values
+				historicValues: values
 			}
 
 			measurement.measurements.push(current);
