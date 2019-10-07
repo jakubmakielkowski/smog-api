@@ -8,7 +8,7 @@ dotenv.config();
 
 const addMeasurement = async (stationId) => {
 
-	const xd = stationId.replace(/\D/g,'');
+	const xd = stationId.replace(/\D/g, '');
 	// Connect with database
 	let database, client;
 	try {
@@ -31,8 +31,8 @@ const addMeasurement = async (stationId) => {
 			dateOfInsertion: new Date()
 		});
 
-		measurementData.history.splice(48);
-		measurementData.forecast.splice(48);
+		measurementData.history.splice(24);
+		measurementData.forecast.splice(24);
 
 		const history = measurementData.history;
 		const forecast = measurementData.forecast;
@@ -45,13 +45,17 @@ const addMeasurement = async (stationId) => {
 		paramNames.forEach(param => {
 			const historicValues = [];
 			history.forEach(element => {
-				const value = element.values.find(value => value.name === param).value;
-				historicValues.push({
-					date: element.fromDateTime,
-					value: value
-				});
+				try {
+					const value = element.values.find(value => value.name === param).value;
+					historicValues.push({
+						date: element.fromDateTime,
+						value: value
+					});
+				} catch (error) {
+
+				}
 			});
-			
+
 			const forecastValues = [];
 			forecast.forEach(element => {
 				const value = element.values.find(value => value.name === param).value;
@@ -93,6 +97,5 @@ const addMeasurement = async (stationId) => {
 	}
 }
 
-// addMeasurement(189);
 
 export default addMeasurement;

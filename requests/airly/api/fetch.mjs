@@ -1,12 +1,14 @@
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 
+dotenv.config();
+
 const requestHeaders = {
 	'Accept': 'application/json',
 	'apikey': process.env.API_AIRLY_KEY
 };
 
-const fetchInstallations = async (stationId) => {
+const fetchInstallations = async () => {
 	const lat = 51.919231;
 	const lng = 19.134422;
 	const maxResults = 10000;

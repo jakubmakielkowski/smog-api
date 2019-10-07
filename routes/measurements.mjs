@@ -16,10 +16,8 @@ router.get("/:stationId", async (req, res) => {
 
 	const { stationId } = req.params;
 
-	// Get measurements data from station
-	const measurements = await db.collection(process.env.DATABASE_COL_MEASUREMENTS).findOne({ "stationId": stationId });
-
 	const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ "stationId": stationId });
+	const measurements = await db.collection(process.env.DATABASE_COL_MEASUREMENTS).findOne({ "stationId": stationId });
 
 	const { source } = station;
 

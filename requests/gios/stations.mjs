@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 
-import Station from '../../schemas/Station.mjs';
 import MongoConnection from '../../utils/database/MongoConnection.mjs';
+import Station from '../../schemas/Station.mjs';
+import { fetchStations } from './api/fetch.mjs';
 
 dotenv.config();
-
 
 const getStations = async () => {
 	// 1. Connect with database
@@ -19,20 +19,18 @@ const getStations = async () => {
 	}
 
 
-
 	// 2. Fetch stations data
 	process.stdout.write(`\nGet Stations (GIOS) - fetching data from API...`);
 	let stationsData;
 	try {
-		const response = await fetch(`${process.env.API_GIOS_STATIONS_ENDPOINT}`);
-		stationsData = await response.json();
+		stationsData = await fetchStations();
 	} catch (error) {
 		throw error;
 	}
 
+
 	// 3. Insert stations
 	for (let i = 0; i < stationsData.length; i++) {
-
 		process.stdout.write(`Get Stations (GIOS) - inserting to database... ${i+1}/${stationsData.length}`);
 
 		const stationData = stationsData[i];

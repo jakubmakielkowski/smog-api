@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
-import fetch from 'node-fetch';
 
-import Station from '../../schemas/Station.mjs';
 import MongoConnection from '../../utils/database/MongoConnection.mjs';
+import Station from '../../schemas/Station.mjs';
+import { fetchInstallations } from './api/fetch.mjs';
 
 dotenv.config();
 
@@ -18,24 +18,9 @@ const getStations = async () => {
 	}
 
 	// 2. Fetch data from API
-	const requestOptions = {
-		lat: 51.919231,
-		lng: 19.134422,
-		maxResults: 10000,
-		maxDistanceKM: 450
-	}
-	const requestHeaders = {
-		'Accept': 'application/json',
-		'apikey': process.env.API_AIRLY_KEY
-	};
 	let installationsList;
 	try {
-		const { lat, lng, maxResults, maxDistanceKM } = requestOptions;
-		const response = await fetch(`${process.env.API_AIRLY_INSTALLATIONS_ENDPOINT}?lat=${lat}&lng=${lng}&maxResults=${maxResults}&maxDistanceKM=${maxDistanceKM}`,
-			{
-				headers: requestHeaders
-			});
-		installationsList = await response.json();
+		installationsList = await fetchInstallations();
 	} catch (error) {
 		console.log(error);
 	}
@@ -46,7 +31,7 @@ const getStations = async () => {
 
 		const installation = installationsList[i];
 
-		// If sponsor is NOT GIOS and location is Poland then add to database
+		// If sponsor is NOT GIOS and location is Poland
 		if (installation.sponsor.id !== 11 && installation.address.country === "Poland") {
 			const { id, location } = installation;
 			const { city, street } = installation.address;

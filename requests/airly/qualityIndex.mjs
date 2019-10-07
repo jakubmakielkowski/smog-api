@@ -7,10 +7,24 @@ import { fetchMeasurements } from './api/fetch.mjs';
 
 dotenv.config();
 
+const mapDescription = (description) => {
+	switch(description) {
+		case 'VERY_LOW': return 'Bardzo dobry';
+		case 'LOW': return 'Dobry';
+		case 'MEDIUM': return 'Umiarkowany';
+		case 'HIGH': return 'Zły';
+		case 'VERY_HIGH': return 'Bardzo zły';
+		default: return 'Bardzo zły';
+	}
+}
+
+
 const addQualityIndex = async (stationId) => {
 
 	// Connect with database
 	let database, client;
+	const xd = stationId.replace(/\D/g,'');
+
 	try {
 		client = await MongoConnection;
 		database = client.db(process.env.DATABASE_NAME);
@@ -20,7 +34,7 @@ const addQualityIndex = async (stationId) => {
 
 	let qualityIndexData;
 	try {
-		qualityIndexData = await fetchMeasurements(stationId);
+		qualityIndexData = await fetchMeasurements(xd);
 	} catch (error) {
 		console.log(error);
 	}
@@ -31,7 +45,7 @@ const addQualityIndex = async (stationId) => {
 
 		const qualityIndex = new QualityIndex({
 			stationId: stationId,
-			level: level,
+			level: mapDescription(level),
 			dateOfInsertion: new Date()
 		});
 
@@ -46,6 +60,7 @@ const addQualityIndex = async (stationId) => {
 			{ upsert: true }
 		);
 		process.stdout.write(`Get QualityIndex (Airly) - succedeed`);
+		return qualityIndex;
 	} catch (error) {
 		process.stdout.write(`Get QualityIndex (Airly) - failed`);
 		console.log(error);

@@ -7,13 +7,13 @@ import MongoConnection from '../../utils/database/MongoConnection.mjs';
 dotenv.config();
 
 const fetchSensors = async (stationId) => {
-	const response = await fetch(`http://api.gios.gov.pl/pjp-api/rest/station/sensors/${stationId}`)
+	const response = await fetch(`https://api.gios.gov.pl/pjp-api/rest/station/sensors/${stationId}`)
 	const sensorsData = await response.json();
 	return sensorsData;
 }
 
 const fetchMeasurements = async (sensorId) => {
-	const response = await fetch(`http://api.gios.gov.pl/pjp-api/rest/data/getData/${sensorId}`)
+	const response = await fetch(`https://api.gios.gov.pl/pjp-api/rest/data/getData/${sensorId}`)
 	const measurementData = await response.json();
 	return measurementData;
 }
@@ -58,10 +58,12 @@ const addMeasurement = async (stationId) => {
 			const measurementData = await fetchMeasurements(sensorIds[i]);
 			const { key, values } = measurementData;
 
-			values.splice(48);
+			values.splice(24);
+			// Pm2.5 to Pm25
+			const paramKey = key.replace(".","");
 
 			const current = {
-				param: key,
+				param: paramKey,
 				historicValues: values
 			}
 
