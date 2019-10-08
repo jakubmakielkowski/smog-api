@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import fetch from 'node-fetch';
 
 import QualityIndex from '../../schemas/QualityIndex.mjs';
 import MongoConnection from '../../utils/database/MongoConnection.mjs';
@@ -25,13 +24,13 @@ const getQualityIndex = async (stationId) => {
 	} catch (error) {
 		console.log(error);
 	}
+
 	const {
-		id,
 		stIndexLevel
 	} = qualitySensorData || {};
 
 	const qualityIndex = new QualityIndex({
-		stationId: id,
+		stationId: stationId,
 		level: stIndexLevel && stIndexLevel.indexLevelName,
 		dateOfInsertion: new Date()
 	});

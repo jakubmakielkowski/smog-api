@@ -2,13 +2,15 @@ import dotenv from 'dotenv';
 
 import MongoConnection from '../../utils/database/MongoConnection.mjs';
 import Measurement from '../../schemas/Measurement.mjs';
+import { idToNumber } from '../../utils/api/id.mjs';
 import { fetchMeasurements } from './api/fetch.mjs';
 
 dotenv.config();
 
+const defaultParams = ["PM10", "PM25", "C6H6", "CO", "SO2", "NO2", "O3"];
+
 const addMeasurement = async (stationId) => {
 
-	const xd = stationId.replace(/\D/g, '');
 	// Connect with database
 	let database, client;
 	try {
@@ -20,7 +22,7 @@ const addMeasurement = async (stationId) => {
 
 	let measurementData;
 	try {
-		measurementData = await fetchMeasurements(xd);
+		measurementData = await fetchMeasurements(idToNumber(stationId));
 	} catch (error) {
 		console.log(error);
 	}
@@ -37,7 +39,6 @@ const addMeasurement = async (stationId) => {
 		const history = measurementData.history;
 		const forecast = measurementData.forecast;
 
-		const defaultParams = ["PM10", "PM25", "C6H6", "CO", "SO2", "NO2", "O3"];
 		const params = history[0].values.filter(value => defaultParams.find(param => param === value.name));
 		const paramNames = params.map(param => param.name);
 
@@ -85,15 +86,13 @@ const addMeasurement = async (stationId) => {
 			{ upsert: true }
 		);
 		client.close();
-		return measurement;
-
 		process.stdout.write(`Get QualityIndex (Airly) - succedeed`);
+		return measurement;
 	} catch (error) {
 		process.stdout.write(`Get QualityIndex (Airly) - failed`);
 		console.log(error);
 	} finally {
 		client.close();
-
 	}
 }
 

@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
-import fetch from 'node-fetch';
 
 import MongoConnection from '../../utils/database/MongoConnection.mjs';
 import QualityIndex from '../../schemas/QualityIndex.mjs';
+import { idToNumber } from '../../utils/api/id.mjs';
 import { fetchMeasurements } from './api/fetch.mjs';
 
 dotenv.config();
@@ -23,8 +23,6 @@ const addQualityIndex = async (stationId) => {
 
 	// Connect with database
 	let database, client;
-	const xd = stationId.replace(/\D/g,'');
-
 	try {
 		client = await MongoConnection;
 		database = client.db(process.env.DATABASE_NAME);
@@ -34,7 +32,7 @@ const addQualityIndex = async (stationId) => {
 
 	let qualityIndexData;
 	try {
-		qualityIndexData = await fetchMeasurements(xd);
+		qualityIndexData = await fetchMeasurements(idToNumber(stationId));
 	} catch (error) {
 		console.log(error);
 	}
