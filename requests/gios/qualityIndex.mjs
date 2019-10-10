@@ -35,7 +35,7 @@ const getQualityIndex = async (stationId) => {
 		dateOfInsertion: new Date()
 	});
 
-	database.collection("QualityIndices").updateOne(
+	database.collection("Stations").updateOne(
 		{ stationId: qualityIndex.stationId },
 		{
 			$set: {

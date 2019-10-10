@@ -17,7 +17,9 @@ const StationSchema = new mongoose.Schema(
 			logo: String,
 			link: String
 		},
-		source: String
+		source: String,
+		level: String,
+		dateOfInsertion: Date
 	}
 );
 
