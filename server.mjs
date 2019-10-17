@@ -20,6 +20,6 @@ app.use("/stations", stations);
 app.use("/qualityIndices", qualityIndices);
 app.use("/measurements", measurements);
 
-app.listen(process.env.SERVER_PORT_DEV, () =>
-	console.log(`Example app listening on ${process.env.SERVER_PORT_DEV}!`),
+app.listen(process.env.SERVER_PORT_DEV || 8080, () =>
+	console.log(`Example app listening on ${process.env.SERVER_PORT_DEV || 8080}!`),
 );
