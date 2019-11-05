@@ -4,6 +4,7 @@ import express from "express";
 import addGIOSMeasurement from '../requests/gios/measurement.mjs';
 import addAirlyMeasurement from '../requests/airly/measurement.mjs';
 import MongoConnection from '../utils/database/MongoConnection.mjs';
+import isRecordObsolete from '../utils/database/dateOfInsertion.mjs';
 
 dotenv.config();
 const router = express.Router();
@@ -22,7 +23,7 @@ router.get("/:stationId", async (req, res) => {
 	const { source } = station;
 
 	// Send existing data or fetch it from API if not present
-	if(measurements){
+	if(measurements && !isRecordObsolete(measurements)){
 		res.send(measurements);
 	} else {
 		let newMeasurements;

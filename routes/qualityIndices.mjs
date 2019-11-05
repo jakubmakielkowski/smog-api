@@ -4,6 +4,7 @@ import express from "express";
 import MongoConnection from '../utils/database/MongoConnection.mjs';
 import addAirlyQualityIndex from '../requests/airly/qualityIndex.mjs';
 import addGIOSQualityIndex from '../requests/gios/qualityIndex.mjs';
+import isRecordObsolete from '../utils/database/dateOfInsertion.mjs';
 
 dotenv.config();
 const router = express.Router();
@@ -21,7 +22,7 @@ router.get("/:stationId", async (req, res) => {
 	const { source } = station;
 
 	// Send existing data or fetch it from API if not present
-	if (qualityIndex) {
+	if (qualityIndex && !isRecordObsolete(measurements)) {
 		res.send(qualityIndex);
 	} else {
 		let newQualityIndex;
