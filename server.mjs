@@ -2,8 +2,8 @@ import dotenv from 'dotenv';
 import express from "express";
 
 import stations from "./routes/stations.mjs";
-import qualityIndices from "./routes/qualityIndices";
-import measurements from "./routes/measurements";
+import qualityIndices from "./routes/qualityIndices.mjs";
+import measurements from "./routes/measurements.mjs";
 
 dotenv.config();
 const app = express();
