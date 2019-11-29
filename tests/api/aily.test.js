@@ -1,15 +1,15 @@
-require("dotenv").config()
-const fetch = require("node-fetch");
+require('dotenv').config();
+const fetch = require('node-fetch');
 
 const requestHeaders = {
-	'Accept': 'application/json',
-	'apikey': process.env.API_AIRLY_KEY
+  Accept: 'application/json',
+  apikey: process.env.API_AIRLY_KEY,
 };
 
-test("Should fetch installations from API", async () => {
+test('Should fetch installations from API', async () => {
   const response = await fetch(`${process.env.API_AIRLY_INSTALLATIONS_ENDPOINT}?lat=${51}&lng=${19}&maxResults=${3}&maxDistanceKM=${50}`, {
-		headers: requestHeaders
-	});
+    headers: requestHeaders,
+  });
   expect(response).toBeDefined();
 
   const installationsData = await response.json();
@@ -19,12 +19,10 @@ test("Should fetch installations from API", async () => {
   expect(exampleInstallationData instanceof Object).toBe(true);
 });
 
-
-
-test("Should fetch measuement from API", async () => {
+test('Should fetch measuement from API', async () => {
   const response = await fetch(`${process.env.API_AIRLY_INSTALLATIONS_ENDPOINT}?installationId=${189}`, {
-		headers: requestHeaders
-	});
+    headers: requestHeaders,
+  });
   expect(response).toBeDefined();
 
   const installationsData = await response.json();

@@ -1,8 +1,7 @@
-require("dotenv").config()
-const fetch = require("node-fetch");
+require('dotenv').config();
+const fetch = require('node-fetch');
 
-
-test("Should fetch stations from API", async () => {
+test('Should fetch stations from API', async () => {
   const response = await fetch(process.env.API_GIOS_STATIONS_ENDPOINT);
   expect(response).toBeDefined();
 
@@ -13,8 +12,7 @@ test("Should fetch stations from API", async () => {
   expect(exampleStationData instanceof Object).toBe(true);
 });
 
-
-test("Should fetch sensor from API", async () => {
+test('Should fetch sensor from API', async () => {
   const response = await fetch(`${process.env.API_GIOS_SENSORS_ENDPOINT}/14`);
   expect(response).toBeDefined();
 
@@ -25,8 +23,7 @@ test("Should fetch sensor from API", async () => {
   expect(exampleSensorData instanceof Object).toBe(true);
 });
 
-
-test("Should fetch qualityIndex from API", async () => {
+test('Should fetch qualityIndex from API', async () => {
   const response = await fetch(`${process.env.API_GIOS_QUALITY_INDICES_ENDPOINT}/52`);
   expect(response).toBeDefined();
 
@@ -34,8 +31,7 @@ test("Should fetch qualityIndex from API", async () => {
   expect(sensorsData instanceof Object).toBe(true);
 });
 
-
-test("Should fetch measurement from API", async () => {
+test('Should fetch measurement from API', async () => {
   const response = await fetch(`${process.env.API_GIOS_MEASUREMENTS_ENDPOINT}/92`);
   expect(response).toBeDefined();
 
@@ -44,7 +40,7 @@ test("Should fetch measurement from API", async () => {
 
   const { key, values } = measurementsData;
 
-  expect(typeof key).toBe("string");
+  expect(typeof key).toBe('string');
   expect(values instanceof Array).toBe(true);
 
   const [exampleValue] = values;
