@@ -1,11 +1,10 @@
-import dotenv from 'dotenv';
-import express from "express";
+require('dotenv').config();
+const express = require("express");
 
-import stations from "./routes/stations.mjs";
-import qualityIndices from "./routes/qualityIndices.mjs";
-import measurements from "./routes/measurements.mjs";
+const stations = require("./routes/stations.js");
+const qualityIndices = require("./routes/qualityIndices.js");
+const measurements = require("./routes/measurements.js");
 
-dotenv.config();
 const app = express();
 
 app.use((req, res, next) => {

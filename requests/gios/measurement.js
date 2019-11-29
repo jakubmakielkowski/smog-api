@@ -1,12 +1,8 @@
-import dotenv from 'dotenv';
-import fetch from 'node-fetch';
+require('dotenv').config();
 
-import MongoConnection from '../../utils/database/MongoConnection.mjs';
-import Measurement from '../../schemas/Measurement.mjs';
-import { idToNumber } from '../../utils/api/id.mjs';
-import { fetchSensor, fetchMeasurement } from './api/fetch.mjs';
-
-dotenv.config();
+const MongoConnection = require('../../utils/database/MongoConnection.js');const Measurement = require('../../schemas/Measurement.js');
+const { idToNumber } = require('../../utils/api/id.js');
+const { fetchSensor, fetchMeasurement } =  require('./api/fetch.js');
 
 // Adds measurement data to database
 const addMeasurement = async (stationId) => {
@@ -76,4 +72,4 @@ const addMeasurement = async (stationId) => {
 	return measurement;	
 }
 
-export default addMeasurement;
+module.exports =addMeasurement;

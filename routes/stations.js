@@ -1,11 +1,9 @@
-import express from "express";
-import dotenv from 'dotenv';
+const express =   require("express");
+require('dotenv').config();
 
-import MongoConnection from '../utils/database/MongoConnection.mjs';
+const MongoConnection = require('../utils/database/MongoConnection.js');
 
-dotenv.config();
 const router = express.Router();
-
 
 router.get("/search", async (req, res) => {
 	const client = await MongoConnection;
@@ -33,4 +31,4 @@ router.get("/:stationId", async (req, res) => {
 	res.send(station);
 });
 
-export default router;
+module.exports =router;

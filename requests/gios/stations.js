@@ -1,11 +1,7 @@
-import dotenv from 'dotenv';
-import fetch from 'node-fetch';
+require('dotenv').config();
 
-import MongoConnection from '../../utils/database/MongoConnection.mjs';
-import Station from '../../schemas/Station.mjs';
-import { fetchStations } from './api/fetch.mjs';
-
-dotenv.config();
+const MongoConnection = require('../../utils/database/MongoConnection.js');const Station = require('../../schemas/Station.js');
+const { fetchStations } = require('./api/fetch.js');
 
 const getStations = async () => {
 	// 1. Connect with database
@@ -75,4 +71,4 @@ const getStations = async () => {
 
 getStations();
 
-export default getStations;
+module.exports =getStations;

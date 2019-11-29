@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
+require('dotenv').config();
 
-import MongoConnection from '../../utils/database/MongoConnection.mjs';
-import QualityIndex from '../../schemas/QualityIndex.mjs';
-import { idToNumber } from '../../utils/api/id.mjs';
-import { fetchMeasurements } from './api/fetch.mjs';
-
-dotenv.config();
+const MongoConnection = require('../../utils/database/MongoConnection.js');
+const QualityIndex= require('../../schemas/QualityIndex.js');
+const { idToNumber } = require('../../utils/api/id.js');
+const { fetchMeasurements } = require('./api/fetch.js');
 
 const mapDescription = (description) => {
 	switch(description) {
@@ -67,4 +65,4 @@ const addQualityIndex = async (stationId) => {
 	}
 }
 
-export default addQualityIndex;
+module.exports = addQualityIndex;

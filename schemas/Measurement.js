@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Measurement = new mongoose.Schema(
 	{
@@ -21,4 +21,4 @@ const Measurement = new mongoose.Schema(
 
 const MeasurementModel = mongoose.model("Measurement", Measurement);
 
-export default MeasurementModel;
+module.exports =MeasurementModel;

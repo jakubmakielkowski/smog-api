@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
+require('dotenv').config();
 
-import MongoConnection from '../../utils/database/MongoConnection.mjs';
-import Measurement from '../../schemas/Measurement.mjs';
-import { idToNumber } from '../../utils/api/id.mjs';
-import { fetchMeasurements } from './api/fetch.mjs';
-
-dotenv.config();
+const MongoConnection = require('../../utils/database/MongoConnection.js');
+const Measurement = require('../../schemas/Measurement.js');
+const { idToNumber } = require('../../utils/api/id.js');
+const { fetchMeasurements } = require('./api/fetch.js');
 
 const defaultParams = ["PM10", "PM25", "C6H6", "CO", "SO2", "NO2", "O3"];
 
@@ -97,4 +95,4 @@ const addMeasurement = async (stationId) => {
 }
 
 
-export default addMeasurement;
+module.exports =addMeasurement;

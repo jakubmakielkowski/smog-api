@@ -1,14 +1,12 @@
-import dotenv from 'dotenv';
-import express from "express";
+require('dotenv').config();
+const express = require("express");
 
-import MongoConnection from '../utils/database/MongoConnection.mjs';
-import addAirlyQualityIndex from '../requests/airly/qualityIndex.mjs';
-import addGIOSQualityIndex from '../requests/gios/qualityIndex.mjs';
-import isRecordObsolete from '../utils/database/dateOfInsertion.mjs';
+const MongoConnection = require('../utils/database/MongoConnection.js');
+const addAirlyQualityIndex = require('../requests/airly/qualityIndex.js');
+const addGIOSQualityIndex = require('../requests/gios/qualityIndex.js');
+const isRecordObsolete = require('../utils/database/dateOfInsertion.js');
 
-dotenv.config();
 const router = express.Router();
-
 
 router.get("/:stationId", async (req, res) => {
 	const client = await MongoConnection;
@@ -43,4 +41,4 @@ router.get("/", async (req, res) => {
 	res.send(qualityIndices);
 });
 
-export default router;
+module.exports =router;

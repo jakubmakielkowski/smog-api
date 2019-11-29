@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const QualityIndexSchema = new mongoose.Schema(
 	{
@@ -10,4 +10,4 @@ const QualityIndexSchema = new mongoose.Schema(
 
 const QualityIndexModel =  mongoose.model("QualityIndex", QualityIndexSchema);
 
-export default QualityIndexModel;
+module.exports =QualityIndexModel;

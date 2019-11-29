@@ -4,4 +4,4 @@ const sleep = (ms) => {
 	});
 }
 
-export default sleep;
+module.exports =sleep;

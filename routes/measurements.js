@@ -1,14 +1,12 @@
-import dotenv from 'dotenv';
-import express from "express";
+require('dotenv').config();
+const express = require("express");
 
-import addGIOSMeasurement from '../requests/gios/measurement.mjs';
-import addAirlyMeasurement from '../requests/airly/measurement.mjs';
-import MongoConnection from '../utils/database/MongoConnection.mjs';
-import isRecordObsolete from '../utils/database/dateOfInsertion.mjs';
+const addGIOSMeasurement = require('../requests/gios/measurement.js');
+const addAirlyMeasurement = require('../requests/airly/measurement.js');
+const MongoConnection = require('../utils/database/MongoConnection.js');
+const isRecordObsolete = require('../utils/database/dateOfInsertion.js');
 
-dotenv.config();
 const router = express.Router();
-
 
 // Get measurements from station sensors
 router.get("/:stationId", async (req, res) => {
@@ -36,4 +34,4 @@ router.get("/:stationId", async (req, res) => {
 	}
 });
 
-export default router;
+module.exports =router;

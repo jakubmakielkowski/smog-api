@@ -1,8 +1,6 @@
-import dotenv from 'dotenv';
+require('dotenv').config();
 
-import MongoConnection from './MongoConnection.mjs';
-
-dotenv.config();
+const MongoConnection = require('./MongoConnection.js');
 
 // Create stations index
 const createIndex = async () => {
@@ -15,6 +13,7 @@ const createIndex = async () => {
 	});
 	
 	console.log("Stations text index created");
+	process.exit();
 }
 
 createIndex();

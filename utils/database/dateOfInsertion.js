@@ -11,4 +11,4 @@ const isRecordObsolete = (obj) => {
 	return msToHours(currentDate-dateOfInsertion) > hours;
 }
 
-export default isRecordObsolete;
+module.exports =isRecordObsolete;

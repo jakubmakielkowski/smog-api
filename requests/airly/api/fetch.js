@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
-import fetch from 'node-fetch';
-
-dotenv.config();
+require('dotenv').config();
+const fetch = require('node-fetch');
 
 const requestHeaders = {
 	'Accept': 'application/json',
@@ -35,4 +33,4 @@ const fetchMeasurements = async (stationId) => {
 	return measurementData;
 }
 
-export { fetchInstallations, fetchMeasurements }
+module.exports = { fetchInstallations, fetchMeasurements }

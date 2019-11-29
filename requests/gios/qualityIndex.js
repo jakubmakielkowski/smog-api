@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
+require('dotenv').config();
 
-import QualityIndex from '../../schemas/QualityIndex.mjs';
-import MongoConnection from '../../utils/database/MongoConnection.mjs';
-import { idToNumber } from '../../utils/api/id.mjs';
-import { fetchQualityIndex } from './api/fetch.mjs';
-
-dotenv.config();
+const QualityIndex= require('../../schemas/QualityIndex.js');
+const MongoConnection = require('../../utils/database/MongoConnection.js');
+const { idToNumber } = require('../../utils/api/id.js');
+const { fetchQualityIndex } =  require('./api/fetch.js');
 
 const getQualityIndex = async (stationId) => {
 
@@ -51,4 +49,4 @@ const getQualityIndex = async (stationId) => {
 	return qualityIndex;
 }
 
-export default getQualityIndex;
+module.exports =getQualityIndex;

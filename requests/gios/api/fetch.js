@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
-import fetch from 'node-fetch';
-
-dotenv.config();
+require('dotenv').config();
+const fetch = require('node-fetch');
 
 
 const fetchStations = async () => {
@@ -28,4 +26,4 @@ const fetchMeasurement = async (sensorId) => {
 	return installationsData;
 }
 
-export { fetchStations, fetchSensor, fetchQualityIndex, fetchMeasurement }
+module.exports ={ fetchStations, fetchSensor, fetchQualityIndex, fetchMeasurement }
