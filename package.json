@@ -12,8 +12,6 @@
     "server-debug": "node --inspect=0.0.0.0:9229 ./server.js",
     "request": "node ./requests/request.js",
     "request-gios-stations": "node ./requests/gios/stations.js",
-    "request-gios-qualityIndices": "node ./requests/gios/qualityIndex.js",
-    "request-gios-measurements": "node ./requests/gios/measurements.js",
     "request-airly-stations": "node ./requests/airly/stations.js",
     "create-index": "node ./utils/database/createIndex.js"
   },

@@ -22,6 +22,22 @@ router.get('/', async (req, res) => {
   res.send(stations);
 });
 
+router.get('/gios', async (req, res) => {
+  const client = await MongoConnection;
+  const db = client.db(process.env.DATABASE_NAME);
+
+  const stations = await db.collection(process.env.DATABASE_COL_STATIONS).find({source: "GIOS"}).toArray();
+  res.send(stations);
+});
+
+router.get('/airly', async (req, res) => {
+  const client = await MongoConnection;
+  const db = client.db(process.env.DATABASE_NAME);
+
+  const stations = await db.collection(process.env.DATABASE_COL_STATIONS).find({source: "Airly"}).toArray();
+  res.send(stations);
+});
+
 router.get('/:stationId', async (req, res) => {
   const client = await MongoConnection;
   const db = client.db(process.env.DATABASE_NAME);
