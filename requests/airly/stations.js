@@ -1,20 +1,11 @@
 require('dotenv').config();
 
-const MongoConnection = require('../../utils/database/MongoConnection.js');
+const client = require('../../utils/database/client');
+const { db } = require('../../schemas/Station.js');
 const Station = require('../../schemas/Station.js');
 const { fetchInstallations } = require('./api/fetch.js');
 
 const getStations = async () => {
-  // 1. Connect with database
-  let database; let
-    client;
-  try {
-    client = await MongoConnection;
-    database = client.db(process.env.DATABASE_NAME);
-  } catch (error) {
-    console.log(error);
-  }
-
   // 2. Fetch data from API
   let installationsList;
   try {
@@ -57,7 +48,7 @@ const getStations = async () => {
       }
 
       // Insert station to db
-      await database.collection(process.env.DATABASE_COL_STATIONS).updateOne(
+      await client.db.collection(process.env.DATABASE_COL_STATIONS).updateOne(
         { stationId: station.stationId },
         {
           $set: {
@@ -76,7 +67,6 @@ const getStations = async () => {
   }
 
   process.stdout.write('Get Stations (Airly) - succedeed');
-  client.close();
 };
 
 getStations();

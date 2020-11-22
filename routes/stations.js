@@ -1,43 +1,34 @@
 require('dotenv').config();
 const express = require('express');
 
-const MongoConnection = require('../utils/database/MongoConnection.js');
 const addAirlyQualityIndex = require('../requests/airly/qualityIndex.js');
 const addAirlyMeasurement = require('../requests/airly/measurement.js');
 const addGIOSQualityIndex = require('../requests/gios/qualityIndex.js');
 const addGIOSMeasurement = require('../requests/gios/measurement.js');
 const isRecordObsolete = require('../utils/database/dateOfInsertion.js');
 const buildQuery = require('./helpers/query.js');
+const client = require('../utils/database/client');
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const client = await MongoConnection;
-  const db = client.db(process.env.DATABASE_NAME);
-
   const query = buildQuery(req.query);
 
-  const stations = await db.collection(process.env.DATABASE_COL_STATIONS).find(query).toArray();
+  const stations = await client.db.collection(process.env.DATABASE_COL_STATIONS).find(query).toArray();
   res.send(stations);
 });
 
 router.get('/:stationId', async (req, res) => {
-  const client = await MongoConnection;
-  const db = client.db(process.env.DATABASE_NAME);
-
   const { stationId } = req.params;
-  const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId });
+  const station = await client.db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId });
   res.send(station);
 });
   
 router.get('/:stationId/qualityIndex', async (req, res) => {
-  const client = await MongoConnection;
-  const db = client.db(process.env.DATABASE_NAME);
-
   const { stationId } = req.params;
 
-  const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId });
-  const qualityIndex = await db.collection(process.env.DATABASE_COL_QUALITY_INDEX).findOne({ stationId });
+  const station = await client.db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId });
+  const qualityIndex = await client.db.collection(process.env.DATABASE_COL_QUALITY_INDEX).findOne({ stationId });
 
   const { source } = station;
 
@@ -56,13 +47,10 @@ router.get('/:stationId/qualityIndex', async (req, res) => {
 });
   
 router.get('/:stationId/measurements', async (req, res) => {
-  const client = await MongoConnection;
-  const db = client.db(process.env.DATABASE_NAME);
-
   const { stationId } = req.params;
 
-  const station = await db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId });
-  const measurements = await db.collection(process.env.DATABASE_COL_MEASUREMENTS).findOne({ stationId });
+  const station = await client.db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId });
+  const measurements = await client.db.collection(process.env.DATABASE_COL_MEASUREMENTS).findOne({ stationId });
 
   const { source } = station;
 

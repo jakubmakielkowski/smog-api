@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const MongoConnection = require('../../utils/database/MongoConnection.js');
+const client = require('../../utils/database/client');
 const Measurement = require('../../schemas/Measurement.js');
 const { idToNumber } = require('../../utils/api/id.js');
 const { fetchMeasurements } = require('./api/fetch.js');
@@ -8,16 +8,6 @@ const { fetchMeasurements } = require('./api/fetch.js');
 const defaultParams = ['PM10', 'PM25', 'C6H6', 'CO', 'SO2', 'NO2', 'O3'];
 
 const addMeasurement = async (stationId) => {
-  // Connect with database
-  let database; let
-    client;
-  try {
-    client = await MongoConnection;
-    database = client.db(process.env.DATABASE_NAME);
-  } catch (error) {
-    console.log(error);
-  }
-
   let measurementData;
   try {
     measurementData = await fetchMeasurements(idToNumber(stationId));
@@ -73,7 +63,7 @@ const addMeasurement = async (stationId) => {
 
     measurement.measurements = measurements;
 
-    await database.collection('Measurements').updateOne(
+    await client.db.collection('Measurements').updateOne(
       { stationId: measurement.stationId },
       {
         $set: {
@@ -83,14 +73,11 @@ const addMeasurement = async (stationId) => {
       },
       { upsert: true },
     );
-    client.close();
     process.stdout.write('Get QualityIndex (Airly) - succedeed');
     return measurement;
   } catch (error) {
     process.stdout.write('Get QualityIndex (Airly) - failed');
     console.log(error);
-  } finally {
-    client.close();
   }
 };
 

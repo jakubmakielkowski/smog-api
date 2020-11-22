@@ -1,9 +1,10 @@
 require('dotenv').config();
 
-const MongoConnection = require('../../utils/database/MongoConnection.js');
+const client = require('../../utils/database/client');
 const QualityIndex = require('../../schemas/QualityIndex.js');
 const { idToNumber } = require('../../utils/api/id.js');
 const { fetchMeasurements } = require('./api/fetch.js');
+const { db } = require('../../schemas/QualityIndex.js');
 
 const mapDescription = (description) => {
   switch (description) {
@@ -17,16 +18,6 @@ const mapDescription = (description) => {
 };
 
 const addQualityIndex = async (stationId) => {
-  // Connect with database
-  let database; let
-    client;
-  try {
-    client = await MongoConnection;
-    database = client.db(process.env.DATABASE_NAME);
-  } catch (error) {
-    console.log(error);
-  }
-
   let qualityIndexData;
   try {
     qualityIndexData = await fetchMeasurements(idToNumber(stationId));
@@ -44,7 +35,7 @@ const addQualityIndex = async (stationId) => {
       dateOfInsertion: new Date(),
     });
 
-    await database.collection('Stations').updateOne(
+    await client.db.collection('Stations').updateOne(
       { stationId: qualityIndex.stationId },
       {
         $set: {
@@ -59,8 +50,6 @@ const addQualityIndex = async (stationId) => {
   } catch (error) {
     process.stdout.write('Get QualityIndex (Airly) - failed');
     console.log(error);
-  } finally {
-    client.close();
   }
 };
 

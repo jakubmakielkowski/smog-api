@@ -1,20 +1,10 @@
 require('dotenv').config();
 
-const MongoConnection = require('../../utils/database/MongoConnection.js'); const Station = require('../../schemas/Station.js');
+const client = require('../../utils/database/client');
+const Station = require('../../schemas/Station.js');
 const { fetchStations } = require('./api/fetch.js');
 
 const getStations = async () => {
-  // 1. Connect with database
-  process.stdout.write('Get Stations (GIOS) - connecting to db...');
-  let database; let
-    client;
-  try {
-    client = await MongoConnection;
-    database = client.db(process.env.DATABASE_NAME);
-  } catch (error) {
-    console.log(error);
-  }
-
   // 2. Fetch stations data
   process.stdout.write('\nGet Stations (GIOS) - fetching data from API...');
   let stationsData;
@@ -50,7 +40,7 @@ const getStations = async () => {
     });
 
     // Insert station to db
-    await database.collection('Stations').updateOne(
+    await client.db.collection('Stations').updateOne(
       { stationId: station.stationId },
       {
         $set: {
@@ -67,7 +57,6 @@ const getStations = async () => {
   }
 
   process.stdout.write('Get Stations (GIOS) succedeed');
-  client.close();
 };
 
 getStations();

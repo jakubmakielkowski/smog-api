@@ -1,21 +1,11 @@
 require('dotenv').config();
 
-const MongoConnection = require('../../utils/database/MongoConnection.js'); const Measurement = require('../../schemas/Measurement.js');
+const client = require('../../utils/database/client');
 const { idToNumber } = require('../../utils/api/id.js');
 const { fetchSensor, fetchMeasurement } = require('./api/fetch.js');
 
 // Adds measurement data to database
 const addMeasurement = async (stationId) => {
-  // 1. Connect with database
-  let database; let
-    client;
-  try {
-    client = await MongoConnection;
-    database = client.db(process.env.DATABASE_NAME);
-  } catch (error) {
-    console.log(error);
-  }
-
   // 2. Fetch sensors
   let sensorIds;
   try {
@@ -53,7 +43,7 @@ const addMeasurement = async (stationId) => {
     }
   }
 
-  await database.collection('Measurements').updateOne(
+  await client.db.collection('Measurements').updateOne(
     {
       stationId: measurement.stationId,
     },
@@ -67,7 +57,6 @@ const addMeasurement = async (stationId) => {
   );
 
   process.stdout.write('getMeasurements request succeeded');
-  client.close();
   return measurement;
 };
 
