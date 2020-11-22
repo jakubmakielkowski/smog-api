@@ -21,7 +21,12 @@ router.get('/', async (req, res) => {
 router.get('/:stationId', async (req, res) => {
   const { stationId } = req.params
   const station = await client.db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId })
-  res.send(station)
+
+  if (station) {
+    res.send(station)
+  } else {
+    res.status(404).send(null)
+  }
 })
 
 router.get('/:stationId/qualityIndex', async (req, res) => {
@@ -30,24 +35,28 @@ router.get('/:stationId/qualityIndex', async (req, res) => {
   const station = await client.db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId })
   const qualityIndex = await client.db.collection(process.env.DATABASE_COL_QUALITY_INDEX).findOne({ stationId })
 
-  const { source } = station
+  if (station) {
+    const { source } = station
 
-  // Send existing data or fetch it from API if not present
-  if (qualityIndex && !isRecordObsolete(qualityIndex)) {
-    res.send(qualityIndex)
-  } else {
-    let newQualityIndex
-    switch (source) {
-      case 'GIOS':
-        newQualityIndex = await addGIOSQualityIndex(stationId)
-        break
-      case 'Airly':
-        newQualityIndex = await addAirlyQualityIndex(stationId)
-        break
-      default:
-        console.log('Station source is not GIOS or Airly')
+    // Send existing data or fetch it from API if not present
+    if (qualityIndex && !isRecordObsolete(qualityIndex)) {
+      res.send(qualityIndex)
+    } else {
+      let newQualityIndex
+      switch (source) {
+        case 'GIOS':
+          newQualityIndex = await addGIOSQualityIndex(stationId)
+          break
+        case 'Airly':
+          newQualityIndex = await addAirlyQualityIndex(stationId)
+          break
+        default:
+          console.log('Station source is not GIOS or Airly')
+      }
+      res.send(newQualityIndex)
     }
-    res.send(newQualityIndex)
+  } else {
+    res.status(404).send(null)
   }
 })
 
@@ -57,24 +66,28 @@ router.get('/:stationId/measurements', async (req, res) => {
   const station = await client.db.collection(process.env.DATABASE_COL_STATIONS).findOne({ stationId })
   const measurements = await client.db.collection(process.env.DATABASE_COL_MEASUREMENTS).findOne({ stationId })
 
-  const { source } = station
+  if (station) {
+    const { source } = station
 
-  // Send existing data or fetch it from API if not present
-  if (measurements && !isRecordObsolete(measurements)) {
-    res.send(measurements)
-  } else {
-    let newMeasurements
-    switch (source) {
-      case 'GIOS':
-        newMeasurements = await addGIOSMeasurement(stationId)
-        break
-      case 'Airly':
-        newMeasurements = await addAirlyMeasurement(stationId)
-        break
-      default:
-        console.log('Station source is not GIOS or Airly')
+    // Send existing data or fetch it from API if not present
+    if (measurements && !isRecordObsolete(measurements)) {
+      res.send(measurements)
+    } else {
+      let newMeasurements
+      switch (source) {
+        case 'GIOS':
+          newMeasurements = await addGIOSMeasurement(stationId)
+          break
+        case 'Airly':
+          newMeasurements = await addAirlyMeasurement(stationId)
+          break
+        default:
+          console.log('Station source is not GIOS or Airly')
+      }
+      res.send(newMeasurements)
     }
-    res.send(newMeasurements)
+  } else {
+    res.status(404).send(null)
   }
 })
 
