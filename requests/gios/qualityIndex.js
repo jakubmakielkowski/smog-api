@@ -3,7 +3,7 @@ require('dotenv').config()
 const client = require('../../utils/database/client')
 const QualityIndex = require('../../schemas/QualityIndex.js')
 const { idToNumber } = require('../../utils/api/id.js')
-const { fetchQualityIndex } = require('./api/fetch.js')
+const { fetchQualityIndex } = require('./helpers/api.js')
 
 const getQualityIndex = async (stationId) => {
   let qualitySensorData

@@ -1,15 +1,13 @@
 require('dotenv').config()
 
-const client = require('../../utils/database/client')
-const Station = require('../../schemas/Station.js')
-const { fetchStations } = require('./api/fetch.js')
+const client = require('../../../utils/database/client')
+const Station = require('../../../schemas/Station.js')
+const { fetchStations } = require('../helpers/api.js')
 
 const getStations = async () => {
-  // 2. Fetch stations data
   process.stdout.write('\nGet Stations (GIOS) - fetching data from API...')
   const stationsData = await fetchStations()
 
-  // 3. Insert stations
   for (let i = 0; i < stationsData.length; i++) {
     process.stdout.write(`Get Stations (GIOS) - inserting to database... ${i + 1}/${stationsData.length}`)
 
@@ -32,7 +30,6 @@ const getStations = async () => {
       source: 'GIOS'
     })
 
-    // Insert station to db
     await client.db.collection('Stations').updateOne(
       { stationId: station.stationId },
       {

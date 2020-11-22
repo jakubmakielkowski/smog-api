@@ -3,7 +3,7 @@ require('dotenv').config()
 const client = require('../../utils/database/client')
 const QualityIndex = require('../../schemas/QualityIndex.js')
 const { idToNumber } = require('../../utils/api/id.js')
-const { fetchMeasurements } = require('./api/fetch.js')
+const { fetchMeasurements } = require('./helpers/api.js')
 
 const mapDescription = (description) => {
   switch (description) {

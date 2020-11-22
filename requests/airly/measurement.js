@@ -3,7 +3,7 @@ require('dotenv').config()
 const client = require('../../utils/database/client')
 const Measurement = require('../../schemas/Measurement.js')
 const { idToNumber } = require('../../utils/api/id.js')
-const { fetchMeasurements } = require('./api/fetch.js')
+const { fetchMeasurements } = require('./helpers/api.js')
 
 const defaultParams = ['PM10', 'PM25', 'C6H6', 'CO', 'SO2', 'NO2', 'O3']
 

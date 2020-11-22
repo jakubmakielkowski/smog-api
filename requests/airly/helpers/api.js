@@ -1,5 +1,5 @@
 require('dotenv').config()
-const fetch = require('node-fetch')
+const axios = require('axios')
 
 const requestHeaders = {
   Accept: 'application/json',
@@ -12,26 +12,24 @@ const fetchInstallations = async () => {
   const maxResults = 10000
   const maxDistanceKM = 450
 
-  const response = await fetch(
+  const response = await axios.get(
     `${process.env.API_AIRLY_INSTALLATIONS_ENDPOINT}?lat=${lat}&lng=${lng}&maxResults=${maxResults}&maxDistanceKM=${maxDistanceKM}`,
     {
       headers: requestHeaders
     }
   )
 
-  const installationsData = await response.json()
-  return installationsData
+  return response.data
 }
 
 const fetchMeasurements = async (stationId) => {
   const installationId = stationId
 
-  const response = await fetch(`${process.env.API_AIRLY_MEASUREMENTS_ENDPOINT}?installationId=${installationId}`, {
+  const response = await axios.get(`${process.env.API_AIRLY_MEASUREMENTS_ENDPOINT}?installationId=${installationId}`, {
     headers: requestHeaders
   })
 
-  const measurementData = await response.json()
-  return measurementData
+  return response.data
 }
 
 module.exports = { fetchInstallations, fetchMeasurements }

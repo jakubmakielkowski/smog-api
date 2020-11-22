@@ -3,7 +3,7 @@ require('dotenv').config()
 const client = require('../../utils/database/client')
 const Measurement = require('../../schemas/Measurement.js')
 const { idToNumber } = require('../../utils/api/id.js')
-const { fetchSensor, fetchMeasurement } = require('./api/fetch.js')
+const { fetchSensor, fetchMeasurement } = require('./helpers/api.js')
 
 // Adds measurement data to database
 const addMeasurement = async (stationId) => {

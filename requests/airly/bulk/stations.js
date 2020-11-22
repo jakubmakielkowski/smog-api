@@ -1,17 +1,11 @@
 require('dotenv').config()
 
-const client = require('../../utils/database/client')
-const Station = require('../../schemas/Station.js')
-const { fetchInstallations } = require('./api/fetch.js')
+const client = require('../../../utils/database/client')
+const Station = require('../../../schemas/Station.js')
+const { fetchInstallations } = require('../helpers/api.js')
 
 const getStations = async () => {
-  // 2. Fetch data from API
-  let installationsList
-  try {
-    installationsList = await fetchInstallations()
-  } catch (error) {
-    console.log(error)
-  }
+  const installationsList = await fetchInstallations()
 
   // 3. Add stations to database
   for (let i = 0; i < installationsList.length; i++) {
