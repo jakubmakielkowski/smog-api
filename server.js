@@ -3,8 +3,6 @@ const express = require('express');
 const compression = require('compression');
 
 const stations = require('./routes/stations.js');
-const qualityIndices = require('./routes/qualityIndices.js');
-const measurements = require('./routes/measurements.js');
 
 const app = express();
 
@@ -19,7 +17,5 @@ app.use((req, res, next) => {
 });
 
 app.use('/stations', stations);
-app.use('/qualityIndices', qualityIndices);
-app.use('/measurements', measurements);
 
 app.listen(process.env.PORT || 80, () => console.log(`Example app listening on ${process.env.PORT || 80}!`));
