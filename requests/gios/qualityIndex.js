@@ -1,41 +1,39 @@
-require('dotenv').config();
+require('dotenv').config()
 
-const client = require('../../utils/database/client');
-const QualityIndex = require('../../schemas/QualityIndex.js');
-const { idToNumber } = require('../../utils/api/id.js');
-const { fetchQualityIndex } = require('./api/fetch.js');
+const client = require('../../utils/database/client')
+const QualityIndex = require('../../schemas/QualityIndex.js')
+const { idToNumber } = require('../../utils/api/id.js')
+const { fetchQualityIndex } = require('./api/fetch.js')
 
 const getQualityIndex = async (stationId) => {
-  let qualitySensorData;
+  let qualitySensorData
   try {
-    qualitySensorData = await fetchQualityIndex(idToNumber(stationId));
+    qualitySensorData = await fetchQualityIndex(idToNumber(stationId))
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 
-  const {
-    stIndexLevel,
-  } = qualitySensorData || {};
+  const { stIndexLevel } = qualitySensorData || {}
 
   const qualityIndex = new QualityIndex({
     stationId,
     level: stIndexLevel && stIndexLevel.indexLevelName,
-    dateOfInsertion: new Date(),
-  });
+    dateOfInsertion: new Date()
+  })
 
   client.db.collection('Stations').updateOne(
     { stationId: qualityIndex.stationId },
     {
       $set: {
         level: qualityIndex.level,
-        dateOfInsertion: qualityIndex.dateOfInsertion,
-      },
+        dateOfInsertion: qualityIndex.dateOfInsertion
+      }
     },
-    { upsert: true },
-  );
+    { upsert: true }
+  )
 
-  process.stdout.write('getQualityIndex succedeed\n');
-  return qualityIndex;
-};
+  process.stdout.write('getQualityIndex succedeed\n')
+  return qualityIndex
+}
 
-module.exports = getQualityIndex;
+module.exports = getQualityIndex

@@ -8,12 +8,12 @@
   },
   "scripts": {
     "start": "node ./server.js",
-    "server": "nodemon ./server.js",
-    "server-debug": "node --inspect=0.0.0.0:9229 ./server.js",
-    "request": "node ./requests/request.js",
+    "dev": "nodemon ./server.js",
+    "debug": "node --inspect=0.0.0.0:9229 ./server.js",
     "request-gios-stations": "node ./requests/gios/stations.js",
     "request-airly-stations": "node ./requests/airly/stations.js",
-    "create-index": "node ./utils/database/createIndex.js"
+    "create-index": "node ./utils/database/createIndex.js",
+    "lint": ""
   },
   "author": "Jakub Makiełkowski",
   "license": "ISC",
@@ -30,8 +30,11 @@
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "eslint": "^6.7.1",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint": "^7.14.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1"
   }
 }

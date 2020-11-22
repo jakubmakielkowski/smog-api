@@ -1,18 +1,19 @@
-require('dotenv').config();
+require('dotenv').config()
 
-const client = require('../../utils/database/client');
-const { idToNumber } = require('../../utils/api/id.js');
-const { fetchSensor, fetchMeasurement } = require('./api/fetch.js');
+const client = require('../../utils/database/client')
+const Measurement = require('../../schemas/Measurement.js')
+const { idToNumber } = require('../../utils/api/id.js')
+const { fetchSensor, fetchMeasurement } = require('./api/fetch.js')
 
 // Adds measurement data to database
 const addMeasurement = async (stationId) => {
   // 2. Fetch sensors
-  let sensorIds;
+  let sensorIds
   try {
-    const sensorList = await fetchSensor(idToNumber(stationId));
-    sensorIds = sensorList.map((sensor) => sensor.id);
+    const sensorList = await fetchSensor(idToNumber(stationId))
+    sensorIds = sensorList.map((sensor) => sensor.id)
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 
   // 3. For every sensor id, fetch its measurement data
@@ -20,44 +21,44 @@ const addMeasurement = async (stationId) => {
   const measurement = new Measurement({
     stationId,
     dateOfInsertion: new Date(),
-    measurements: [],
-  });
+    measurements: []
+  })
 
   for (let i = 0; i < sensorIds.length - 1; i++) {
     try {
-      const measurementData = await fetchMeasurement(sensorIds[i]);
-      const { key, values } = measurementData;
+      const measurementData = await fetchMeasurement(sensorIds[i])
+      const { key, values } = measurementData
 
-      values.splice(24);
+      values.splice(24)
       // Pm2.5 to Pm25
-      const paramKey = key.replace('.', '');
+      const paramKey = key.replace('.', '')
 
       const current = {
         param: paramKey,
-        historicValues: values,
-      };
+        historicValues: values
+      }
 
-      measurement.measurements.push(current);
+      measurement.measurements.push(current)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
   await client.db.collection('Measurements').updateOne(
     {
-      stationId: measurement.stationId,
+      stationId: measurement.stationId
     },
     {
       $set: {
         measurements: measurement.measurements,
-        dateOfInsertion: measurement.dateOfInsertion,
-      },
+        dateOfInsertion: measurement.dateOfInsertion
+      }
     },
-    { upsert: true },
-  );
+    { upsert: true }
+  )
 
-  process.stdout.write('getMeasurements request succeeded');
-  return measurement;
-};
+  process.stdout.write('getMeasurements request succeeded')
+  return measurement
+}
 
-module.exports = addMeasurement;
+module.exports = addMeasurement

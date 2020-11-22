@@ -1,21 +1,19 @@
-const allowedQueries = [
-  "search",
-  "source"
-];
-  
+const allowedQueries = ['search', 'source']
+
 const buildQuery = (params) => {
-  const query = {};
-  for (param in params) {
-    if (allowedQueries.includes(param)) {
-      if (param === "search") {
-        query.$text = { $search: String(params[param]) }
+  const query = {}
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (allowedQueries.includes(key)) {
+      if (key === 'search') {
+        query.$text = { $search: String(value) }
       } else {
-        query[param] = params[param];
+        query[key] = value
       }
     }
-  };
+  })
 
-  return query;
+  return query
 }
 
-module.exports = buildQuery;
+module.exports = buildQuery

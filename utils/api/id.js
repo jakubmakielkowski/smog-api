@@ -1,4 +1,3 @@
+const idToNumber = (id) => id.replace(/\D/g, '')
 
-const idToNumber = (id) => id.replace(/\D/g, '');
-
-module.exports = { idToNumber };
+module.exports = { idToNumber }
