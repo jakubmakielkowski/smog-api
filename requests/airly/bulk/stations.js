@@ -1,19 +1,22 @@
 require('dotenv').config()
 
-const client = require('../../../utils/database/client')
+const { client, initializeClient } = require('../../../utils/database/client')
 const Station = require('../../../schemas/Station.js')
 const { fetchInstallations } = require('../helpers/api.js')
 
 const getStations = async () => {
+  process.stdout.write('\n Connecting with database...')
+  await initializeClient()
+
+  process.stdout.write('\nGet Stations (GIOS) - fetching data from API...')
   const installationsList = await fetchInstallations()
 
-  // 3. Add stations to database
   for (let i = 0; i < installationsList.length; i++) {
     process.stdout.write(`Get Stations (Airly) - adding to database... ${i + 1}/${installationsList.length}`)
 
     const installation = installationsList[i]
 
-    // If sponsor is NOT GIOS and location is Poland
+    // get only Polish and not GIOS redundant stations
     if (installation.sponsor.id !== 11 && installation.address.country === 'Poland') {
       const { id, location } = installation
       const { city, street } = installation.address
@@ -60,6 +63,7 @@ const getStations = async () => {
   }
 
   process.stdout.write('Get Stations (Airly) - succedeed')
+  process.exit()
 }
 
 getStations()

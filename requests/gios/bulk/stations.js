@@ -1,10 +1,13 @@
 require('dotenv').config()
 
-const client = require('../../../utils/database/client')
+const { client, initializeClient } = require('../../../utils/database/client')
 const Station = require('../../../schemas/Station.js')
 const { fetchStations } = require('../helpers/api.js')
 
 const getStations = async () => {
+  process.stdout.write('\n Connecting to database...')
+  await initializeClient()
+
   process.stdout.write('\nGet Stations (GIOS) - fetching data from API...')
   const stationsData = await fetchStations()
 
@@ -47,6 +50,7 @@ const getStations = async () => {
   }
 
   process.stdout.write('Get Stations (GIOS) succedeed')
+  process.exit()
 }
 
 getStations()

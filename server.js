@@ -18,16 +18,8 @@ app.use((req, res, next) => {
 
 app.use('/stations', stations)
 
-// const { MongoClient } = require('mongodb');
-// const database = require('./utils/database/connection');
+const { initializeClient } = require('./utils/database/client.js')
 
-// MongoClient.connect(process.env.DATABASE_URL_DEV, { useNewUrlParser: true, useUnifiedTopology: true },  (error, client) => {
-//   const db = client.db('smog-api');
-//   app.locals.db = db;
-// });
+initializeClient()
+
 app.listen(process.env.PORT || 80, () => console.log(`Example app listening on ${process.env.PORT || 80}!`))
-
-// connect.then(() => {
-// }).catch((error) => {
-//   console.log(error);
-// })

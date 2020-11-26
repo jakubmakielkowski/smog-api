@@ -7,7 +7,7 @@ const addGIOSQualityIndex = require('../requests/gios/qualityIndex.js')
 const addGIOSMeasurement = require('../requests/gios/measurement.js')
 const isRecordObsolete = require('../utils/database/dateOfInsertion.js')
 const buildQuery = require('./helpers/query.js')
-const client = require('../utils/database/client')
+const { client } = require('../utils/database/client')
 
 const router = express.Router()
 

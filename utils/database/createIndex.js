@@ -1,18 +1,18 @@
 require('dotenv').config()
 
-const MongoConnection = require('./MongoConnection.js')
+const { client, initializeClient } = require('./client.js')
 
 // Create stations index
 const createIndex = async () => {
-  const client = await MongoConnection
-  const db = client.db(process.env.DATABASE_NAME)
+  process.stdout.write('\n Connecting to database...')
+  await initializeClient()
 
-  await db.collection(process.env.DATABASE_COL_STATIONS).createIndex({
+  process.stdout.write('\n Creating text search index...')
+  client.db.collection(process.env.DATABASE_COL_STATIONS).createIndex({
     'address.city': 'text',
     'address.street': 'text'
   })
 
-  console.log('Stations text index created')
   process.exit()
 }
 

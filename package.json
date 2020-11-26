@@ -10,6 +10,7 @@
     "start": "node ./server.js",
     "dev": "nodemon ./server.js",
     "debug": "node --inspect=0.0.0.0:9229 ./server.js",
+    "create-db": "node ./utils/database/createDatabase.js",
     "request-gios-stations": "node ./requests/gios/bulk/stations.js",
     "request-airly-stations": "node ./requests/airly/bulk/stations.js",
     "create-index": "node ./utils/database/createIndex.js",
