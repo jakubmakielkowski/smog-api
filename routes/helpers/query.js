@@ -1,15 +1,25 @@
-const allowedQueries = ['search', 'source']
+const allowedEntries = ['search', 'source', 'bounds']
 
 const buildQuery = (params) => {
   const query = {}
 
   Object.entries(params).forEach(([key, value]) => {
-    if (allowedQueries.includes(key)) {
-      if (key === 'search') {
+    const param = allowedEntries.find(entry => key === entry)
+
+    switch (param) {
+      case 'search':
         query.$text = { $search: String(value) }
-      } else {
-        query[key] = value
-      }
+        break
+      case 'source':
+        query.source = value
+        break
+      case 'bounds':
+        const bounds = value.split(',').map(str => Number(Number(str).toFixed(4)))
+        const [S, N, W, E] = bounds
+
+        query['location.latitude'] = { $gte: S, $lte: N }
+        query['location.longitude'] = { $gte: W, $lte: E }
+        break
     }
   })
 

@@ -17,5 +17,6 @@
     },
     "plugins": ["jest"],
     "rules": {
+        "no-case-declarations": "off"
     }
 }

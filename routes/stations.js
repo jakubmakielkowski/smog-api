@@ -14,7 +14,8 @@ const router = express.Router()
 router.get('/', async (req, res) => {
   const query = buildQuery(req.query)
 
-  const stations = await client.db.collection(process.env.DATABASE_COL_STATIONS).find(query).toArray()
+  const stations = await client.db.collection(process.env.DATABASE_COL_STATIONS).find(query).project({ _id: false }).toArray()
+
   res.send(stations)
 })
 
