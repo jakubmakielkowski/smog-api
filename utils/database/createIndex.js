@@ -8,7 +8,7 @@ const createIndex = async () => {
   await initializeClient()
 
   process.stdout.write('\n Creating text search index...')
-  client.db.collection(process.env.DATABASE_COL_STATIONS).createIndex({
+  await client.db.collection(process.env.DATABASE_COL_STATIONS).createIndex({
     'address.city': 'text',
     'address.street': 'text'
   })
